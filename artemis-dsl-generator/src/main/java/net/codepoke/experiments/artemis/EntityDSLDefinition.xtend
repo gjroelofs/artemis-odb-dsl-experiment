@@ -70,6 +70,17 @@ class EntityDSLDefinition {
 	}
 	
 	/**
+	 * Defines the component has defined as the Type name with the first letter to lowercase.
+	 * E.g.: Position will create Entity.hasPosition().
+	 */
+	def defineComponentHas(extension TransformationContext context, MutableClassDeclaration factory, ClassDeclaration clzz){
+		factory.addMethod("has"+clzz.simpleName.toFirstUpper)[
+			returnType = boolean.newTypeReference
+			visibility = Visibility.PUBLIC						
+		]
+	}
+	
+	/**
 	 * Defines the component add, with all settable fields on the component class as parameters.
 	 * E.g.: Position (with x,y) will create Entity.addPosition(x, y)
 	 */
@@ -150,6 +161,20 @@ class EntityDSLDefinition {
 	}
 	
 	/**
+	 * Checks whether the Entity has the required Component as an expression using the ComponentMapper.
+	 */
+	def StringConcatenationClient hasComponent(ClassDeclaration clzz){
+		'''«getMapperName(clzz)».has(this)'''
+	}
+	
+	/**
+	 * Checks whether the Entity has the required Component using getComponent on the Entity.
+	 */
+	def StringConcatenationClient hasComponentNaive(ClassDeclaration clzz){
+		'''getComponent(«clzz.qualifiedName».class) != null'''
+	}
+	
+	/**
 	 * Adds the given Component to the entity using the Type found in the Mapper.
 	 */
 	def StringConcatenationClient addComponent(ClassDeclaration clzz, String varName){
@@ -194,6 +219,11 @@ class EntityDSLDefinition {
 		
 		defineComponentPool(context, factory, clzz);
 		
+		
+		defineComponentHas(context, factory, clzz) => [
+			body = '''return «hasComponent(clzz)»;'''
+		]	
+		
 		defineComponentGetter(context, factory, clzz) => [
 			body = '''return «getComponent(clzz)»;'''
 		]		
@@ -219,6 +249,10 @@ class EntityDSLDefinition {
 	}
 	
 	def implementComponentDSLNaive(MutableClassDeclaration factory,extension TransformationContext context,  ClassDeclaration clzz){
+				
+		defineComponentHas(context, factory, clzz) => [
+			body = '''return «hasComponentNaive(clzz)»;'''
+		]	
 		
 		defineComponentGetter(context, factory, clzz) => [
 			body = '''return «getComponentNaive(clzz)»;'''

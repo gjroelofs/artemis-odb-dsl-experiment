@@ -24,6 +24,10 @@ public class Test {
 						.addPosition(10, 10)
 						.addHealth(10)
 						.addMana(10);
+			
+			e.health().value = 4f;
+			
+			boolean hasHealth = e.hasHealth();
 		}
 
 		long min = Long.MAX_VALUE;

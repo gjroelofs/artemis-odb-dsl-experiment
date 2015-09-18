@@ -80,7 +80,7 @@
 
 		<dependency>
 			<groupId>net.codepoke.experiments</groupId>
-			<artifactId>artemis-spoon-dsl</artifactId>
+			<artifactId>artemis-dsl</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

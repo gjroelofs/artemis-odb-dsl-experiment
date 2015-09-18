@@ -87,7 +87,7 @@ class EntityDSLDefinition {
 	def defineComponentAdd(extension TransformationContext context, MutableClassDeclaration factory, ClassDeclaration clzz){
 		factory.addMethod("add"+clzz.simpleName.toFirstUpper)[
 			visibility = Visibility.PUBLIC
-			returnType = Entity.newTypeReference
+			returnType = factory.newTypeReference
 			
 			for(f : clzz.matchingFields[isVariableSettable])
 				addParameter(f.simpleName, f.type)
@@ -101,7 +101,7 @@ class EntityDSLDefinition {
 	def defineComponentRemove(extension TransformationContext context, MutableClassDeclaration factory, ClassDeclaration clzz){
 		factory.addMethod("remove"+clzz.simpleName.toFirstUpper)[
 			visibility = Visibility.PUBLIC		
-			returnType = Entity.newTypeReference			
+			returnType = factory.newTypeReference			
 		]
 	}
 
